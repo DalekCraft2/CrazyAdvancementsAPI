@@ -11,7 +11,8 @@ public class JSONMessage {
 	
 	/**
 	 * 
-	 * @param json A JSON representation of an ingame Message {@link <a href="https://github.com/skylinerw/guides/blob/master/java/text%20component.md">Read More</a>}
+	 * @param json A JSON representation of an ingame Message
+	 * @see <a href="https://github.com/skylinerw/guides/blob/master/java/text%20component.md">Text Component</a>
 	 */
 	public JSONMessage(BaseComponent json) {
 		this.json = json;

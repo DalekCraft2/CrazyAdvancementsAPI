@@ -99,7 +99,7 @@ public final class AdvancementManager {
 	}
 	
 	/**
-	 * Gets the boolean that is passed via the advancement packet when an advancement is hidden<brDefault: false
+	 * Gets the boolean that is passed via the advancement packet when an advancement is hidden<br>Default: false
 	 * 
 	 * @return
 	 */

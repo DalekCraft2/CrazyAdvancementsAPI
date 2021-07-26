@@ -180,7 +180,7 @@ public class Advancement {
 	}
 	
 	/**
-	 * Set the Save/Load method<br>{@link SaveMethod.DEFAULT} - Criteria Values will be saved and loaded<br>{@link SaveMethod.NUMBER} - Criteria Number will be saved and loaded
+	 * Set the Save/Load method<br>{@link SaveMethod#DEFAULT} - Criteria Values will be saved and loaded<br>{@link SaveMethod#NUMBER} - Criteria Number will be saved and loaded
 	 * 
 	 * @param saveMethod The Save/Load Method
 	 */
