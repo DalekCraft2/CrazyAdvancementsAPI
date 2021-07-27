@@ -6,37 +6,34 @@ import net.minecraft.network.chat.IChatBaseComponent;
 import net.minecraft.network.chat.IChatBaseComponent.ChatSerializer;
 
 public class JSONMessage {
-	
-	private final BaseComponent json;
-	
-	/**
-	 * 
-	 * @param json A JSON representation of an ingame Message
-	 * @see <a href="https://github.com/skylinerw/guides/blob/master/java/text%20component.md">Text Component</a>
-	 */
-	public JSONMessage(BaseComponent json) {
-		this.json = json;
-	}
-	
-	/**
-	 * 
-	 * @return the JSON representation of an ingame Message
-	 */
-	public BaseComponent getJson() {
-		return json;
-	}
-	
-	/**
-	 * 
-	 * @return An {@link IChatBaseComponent} representation of an ingame Message
-	 */
-	public IChatBaseComponent getBaseComponent() {
-		return ChatSerializer.a(ComponentSerializer.toString(json));
-	}
-	
-	@Override
-	public String toString() {
-		return json.toPlainText();
-	}
-	
+
+    private final BaseComponent json;
+
+    /**
+     * @param json A JSON representation of an ingame Message
+     * @see <a href="https://github.com/skylinerw/guides/blob/master/java/text%20component.md">Text Component</a>
+     */
+    public JSONMessage(BaseComponent json) {
+        this.json = json;
+    }
+
+    /**
+     * @return the JSON representation of an ingame Message
+     */
+    public BaseComponent getJson() {
+        return json;
+    }
+
+    /**
+     * @return An {@link IChatBaseComponent} representation of an ingame Message
+     */
+    public IChatBaseComponent getBaseComponent() {
+        return ChatSerializer.a(ComponentSerializer.toString(json));
+    }
+
+    @Override
+    public String toString() {
+        return json.toPlainText();
+    }
+
 }
