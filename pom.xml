@@ -11,6 +11,13 @@
 
     <name>CrazyAdvancementsAPI</name>
     <url>https://crazyadvancements.endercentral.eu</url>
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+            <url>https://github.com/ZockerAxel/CrazyAdvancementsAPI/blob/master/LICENSE.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -27,7 +34,7 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <!-- Spigot-Server -->
+            <!-- Spigot -->
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
             <version>1.17.1-R0.1-SNAPSHOT</version>
@@ -37,10 +44,20 @@
 
     <repositories>
         <repository>
-            <id>spigot-repo</id>
+            <!-- Spigot-API, Spigot -->
+            <name>SpigotMC</name>
+            <id>spigotmc-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <!-- Apache Maven Javadoc Plugin -->
+            <name>Apache Snapshots</name>
+            <id>apache-snapshots</id>
+            <url>https://repository.apache.org/snapshots/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <build>
         <finalName>${project.name}-${project.version}</finalName>
