@@ -7,6 +7,7 @@ import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import net.minecraft.network.protocol.game.PacketPlayOutAdvancements;
 import net.minecraft.network.protocol.game.PacketPlayOutSelectAdvancementTab;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Warning;
 import org.bukkit.command.Command;
@@ -38,8 +39,8 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
     private static boolean announceAdvancementMessages = true;
     private static HashMap<String, NameKey> openedTabs = new HashMap<>();
     private static boolean useUUID;
-    private final String noPermission = "�cI'm sorry but you do not have permission to perform this command. Please contact the server administrator if you believe that this is in error.";
-    private final String commandIncompatible = "�cThis Command is incompatible with your Arguments!";
+    private final String noPermission = ChatColor.translateAlternateColorCodes('&', "&cI'm sorry but you do not have permission to perform this command. Please contact the server administrator if you believe that this is in error.");
+    private final String commandIncompatible = ChatColor.translateAlternateColorCodes('&', "&cThis Command is incompatible with your Arguments!");
     private final List<String> selectors = Arrays.asList("@a", "@p", "@s", "@r");
     private AdvancementManager fileAdvancementManager;
 
@@ -226,9 +227,9 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
 
     private boolean startsWithSelector(String arg) {
         for (String selector : selectors) {
-			if (arg.startsWith(selector)) {
-				return true;
-			}
+            if (arg.startsWith(selector)) {
+                return true;
+            }
         }
         return false;
     }
@@ -270,13 +271,13 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
                                 Advancement advancement = new Advancement(null, new NameKey("toast", "message"), display);
                                 advancement.displayToast(player);
 
-                                sender.sendMessage("�aSuccessfully displayed Toast to �b" + player.getName() + "�a!");
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aSuccessfully displayed Toast to &b" + player.getName() + "&a!"));
                             } else {
-                                sender.sendMessage("�c'" + args[1] + "' isn't a valid Item Material");
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c'" + args[1] + "' isn't a valid Item Material"));
                             }
 
                         } else {
-                            sender.sendMessage("�cCan't find Player '�e" + args[0] + "�c'");
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cCan't find Player '&e" + args[0] + "&c'"));
                         }
                     } catch (Exception ex) {
                         sender.sendMessage(commandIncompatible);
@@ -284,7 +285,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
 
 
                 } else {
-                    sender.sendMessage("�cUsage: �r" + cmd.getUsage());
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: &r" + cmd.getUsage()));
                 }
             } else {
                 sender.sendMessage(noPermission);
@@ -326,47 +327,47 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
                                             String[] convertedCriteria = Arrays.copyOfRange(args, 3, args.length);
 
                                             if (grant) {
-												if (!advancement.getProgress(player).isDone()) {
-													manager.grantCriteria(player, advancement, convertedCriteria);
-												}
+                                                if (!advancement.getProgress(player).isDone()) {
+                                                    manager.grantCriteria(player, advancement, convertedCriteria);
+                                                }
                                             } else {
                                                 manager.revokeCriteria(player, advancement, convertedCriteria);
                                             }
 
-                                            StringBuilder criteriaString = new StringBuilder("�c" + convertedCriteria[0]);
+                                            StringBuilder criteriaString = new StringBuilder(ChatColor.translateAlternateColorCodes('&', "&c" + convertedCriteria[0]));
                                             if (convertedCriteria.length > 1) {
                                                 for (String criteria : Arrays.copyOfRange(convertedCriteria, 1, convertedCriteria.length - 1)) {
-                                                    criteriaString.append("�a, �c").append(criteria);
+                                                    criteriaString.append("&a, &c").append(criteria);
                                                 }
-                                                criteriaString.append(" �aand �c").append(convertedCriteria[convertedCriteria.length - 1]);
+                                                criteriaString.append(" &aand &c").append(convertedCriteria[convertedCriteria.length - 1]);
                                             }
 
-                                            sender.sendMessage("�aSuccessfully " + (grant ? "granted" : "revoked") + " Criteria " + criteriaString + " �afor '�e" + advancement.getName() + "�a' " + (grant ? "to" : "from") + " �b" + player.getName());
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aSuccessfully " + (grant ? "granted" : "revoked") + " Criteria " + criteriaString + " &afor '&e" + advancement.getName() + "&a' " + (grant ? "to" : "from") + " &b" + player.getName()));
 
                                         } else {
                                             if (grant) {
-												if (!advancement.getProgress(player).isDone()) {
-													manager.grantAdvancement(player, advancement);
-												}
+                                                if (!advancement.getProgress(player).isDone()) {
+                                                    manager.grantAdvancement(player, advancement);
+                                                }
                                             } else {
                                                 manager.revokeAdvancement(player, advancement);
                                             }
 
-                                            sender.sendMessage("�aSuccessfully " + (grant ? "granted" : "revoked") + " Advancement '�e" + advancement.getName() + "�a' " + (grant ? "to" : "from") + " �b" + player.getName());
+                                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&aSuccessfully " + (grant ? "granted" : "revoked") + " Advancement '&e" + advancement.getName() + "&a' " + (grant ? "to" : "from") + " &b" + player.getName()));
                                         }
 
                                     } else {
-                                        sender.sendMessage("�cAdvancement with Name '�e" + args[2] + "�c' does not exist in '�e" + args[1] + "�c'");
+                                        sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cAdvancement with Name '&e" + args[2] + "&c' does not exist in '&e" + args[1] + "&c'"));
                                     }
 
                                 } else {
-                                    sender.sendMessage("�c'�e" + args[1] + "�c' does not contain Player '�e" + args[0] + "�c'");
+                                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c'&e" + args[1] + "&c' does not contain Player '&e" + args[0] + "&c'"));
                                 }
                             } else {
-                                sender.sendMessage("�cManager with Name '�e" + args[1] + "�c' does not exist");
+                                sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cManager with Name '&e" + args[1] + "&c' does not exist"));
                             }
                         } else {
-                            sender.sendMessage("�cCan't find Player '�e" + args[0] + "�c'");
+                            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cCan't find Player '&e" + args[0] + "&c'"));
                         }
 
                     } catch (Exception ex) {
@@ -374,7 +375,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
                     }
 
                 } else {
-                    sender.sendMessage("�cUsage: �r" + cmd.getUsage());
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: &r" + cmd.getUsage()));
                 }
             } else {
                 sender.sendMessage(noPermission);
