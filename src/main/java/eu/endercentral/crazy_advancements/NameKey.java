@@ -19,7 +19,7 @@ public class NameKey {
     }
 
     /**
-     * @param key The key inside the default namespace "minecraft" or a NameSpacedKey seperated by a colon
+     * @param key The key inside the default namespace "minecraft" or a NameSpacedKey separated by a colon
      */
     public NameKey(String key) {
         String[] split = key.split(":");

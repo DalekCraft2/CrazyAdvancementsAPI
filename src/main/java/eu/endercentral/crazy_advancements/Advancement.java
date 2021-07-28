@@ -214,7 +214,7 @@ public class Advancement {
      * Displays an Advancement Message to every Player saying Player has completed said advancement<br>
      * Note that this doesn't grant the advancement
      *
-     * @param player Player who has recieved the advancement
+     * @param player Player who has received the advancement
      */
     public void displayMessageToEverybody(Player player) {
         BaseComponent message = getMessage(player);
@@ -225,7 +225,7 @@ public class Advancement {
     }
 
     /**
-     * @param player Player who has recieved the advancement
+     * @param player Player who has received the advancement
      * @return
      */
     public BaseComponent getMessage(Player player) {
@@ -270,7 +270,7 @@ public class Advancement {
         }
 
         Map<String, Criterion> advCriteria = new HashMap<>();
-        String[][] advRequirements = new String[][]{};
+        String[][] advRequirements;
 
         advCriteria.put("for_free", new Criterion(new CriterionInstance() {
             @Override
@@ -300,7 +300,7 @@ public class Advancement {
         advPrg.getCriterionProgress("for_free").b();
         prg.put(notName, advPrg);
 
-        PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(false, Arrays.asList(saveAdv), new HashSet<>(), prg);
+        PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(false, Collections.singletonList(saveAdv), new HashSet<>(), prg);
         ((CraftPlayer) player).getHandle().b.sendPacket(packet);
 
 
@@ -509,9 +509,7 @@ public class Advancement {
 		if (this.awardedCriteria == null) {
 			this.awardedCriteria = new HashMap<>();
 		}
-		if (this.awardedCriteria.containsKey(uuid.toString())) {
-			this.awardedCriteria.remove(uuid.toString());
-		}
+        this.awardedCriteria.remove(uuid.toString());
     }
 
     public AdvancementProgress getProgress(Player player) {
@@ -541,9 +539,7 @@ public class Advancement {
 		if (this.progress == null) {
 			this.progress = new HashMap<>();
 		}
-		if (this.progress.containsKey(uuid.toString())) {
-			this.progress.remove(uuid.toString());
-		}
+        this.progress.remove(uuid.toString());
     }
 
     public boolean isDone(Player player) {

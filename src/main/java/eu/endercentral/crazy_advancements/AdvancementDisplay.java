@@ -481,7 +481,7 @@ public class AdvancementDisplay {
         this.y = y;
     }
 
-    public static enum AdvancementFrame {
+    public enum AdvancementFrame {
 
         TASK(AdvancementFrameType.a),
         GOAL(AdvancementFrameType.b),
@@ -489,7 +489,7 @@ public class AdvancementDisplay {
 
         private AdvancementFrameType nms;
 
-        private AdvancementFrame(AdvancementFrameType nms) {
+        AdvancementFrame(AdvancementFrameType nms) {
             this.nms = nms;
         }
 

@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
+
 public class AdvancementScreenCloseEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
@@ -18,6 +20,7 @@ public class AdvancementScreenCloseEvent extends Event {
         return handlers;
     }
 
+    @Nonnull
     @Override
     public HandlerList getHandlers() {
         return handlers;

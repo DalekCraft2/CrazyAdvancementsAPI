@@ -24,7 +24,7 @@ public class AdvancementPacketReceiver {
     private static HashMap<String, ChannelHandler> handlers = new HashMap<>();
     private static Field channelField;
 
-    {
+    static {
         for (Field f : NetworkManager.class.getDeclaredFields()) {
             if (f.getType().isAssignableFrom(Channel.class)) {
                 channelField = f;
@@ -40,7 +40,7 @@ public class AdvancementPacketReceiver {
 
         ChannelHandler handle = new MessageToMessageDecoder<Packet>() {
             @Override
-            protected void decode(ChannelHandlerContext chc, Packet packet, List<Object> out) throws Exception {
+            protected void decode(ChannelHandlerContext chc, Packet packet, List<Object> out) {
 
                 if (packet instanceof PacketPlayInAdvancements) {
                     if (!handler.handle(p, (PacketPlayInAdvancements) packet)) {
@@ -84,39 +84,35 @@ public class AdvancementPacketReceiver {
     }
 
     public void initPlayer(Player p) {
-        handlers.put(p.getName(), listen(p, new PacketReceivingHandler() {
+        handlers.put(p.getName(), listen(p, (p1, packet) -> {
 
-            @Override
-            public boolean handle(Player p, PacketPlayInAdvancements packet) {
+            if (packet.c() == Status.a) {
+                NameKey name = new NameKey(packet.d());
+                AdvancementTabChangeEvent event = new AdvancementTabChangeEvent(p1, name);
+                Bukkit.getPluginManager().callEvent(event);
 
-                if (packet.c() == Status.a) {
-                    NameKey name = new NameKey(packet.d());
-                    AdvancementTabChangeEvent event = new AdvancementTabChangeEvent(p, name);
-                    Bukkit.getPluginManager().callEvent(event);
-
-                    if (event.isCancelled()) {
-                        CrazyAdvancements.clearActiveTab(p);
-                        return false;
-                    } else {
-                        if (!event.getTabAdvancement().equals(name)) {
-                            CrazyAdvancements.setActiveTab(p, event.getTabAdvancement());
-                        } else {
-                            CrazyAdvancements.setActiveTab(p, name, false);
-                        }
-                    }
+                if (event.isCancelled()) {
+                    CrazyAdvancements.clearActiveTab(p1);
+                    return false;
                 } else {
-                    AdvancementScreenCloseEvent event = new AdvancementScreenCloseEvent(p);
-                    Bukkit.getPluginManager().callEvent(event);
+                    if (!event.getTabAdvancement().equals(name)) {
+                        CrazyAdvancements.setActiveTab(p1, event.getTabAdvancement());
+                    } else {
+                        CrazyAdvancements.setActiveTab(p1, name, false);
+                    }
                 }
-
-
-                return true;
+            } else {
+                AdvancementScreenCloseEvent event = new AdvancementScreenCloseEvent(p1);
+                Bukkit.getPluginManager().callEvent(event);
             }
+
+
+            return true;
         }));
     }
 
     interface PacketReceivingHandler {
-        public boolean handle(Player p, PacketPlayInAdvancements packet);
+        boolean handle(Player p, PacketPlayInAdvancements packet);
     }
 
 }

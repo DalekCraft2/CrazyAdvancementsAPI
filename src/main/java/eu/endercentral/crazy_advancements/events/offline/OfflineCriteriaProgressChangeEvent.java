@@ -5,6 +5,7 @@ import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class OfflineCriteriaProgressChangeEvent extends Event {
@@ -19,7 +20,6 @@ public class OfflineCriteriaProgressChangeEvent extends Event {
         this.manager = manager;
         this.advancement = advancement;
         this.uuid = uuid;
-        ;
         this.progressBefore = progressBefore;
         this.progress = progress;
     }
@@ -28,6 +28,7 @@ public class OfflineCriteriaProgressChangeEvent extends Event {
         return handlers;
     }
 
+    @Nonnull
     @Override
     public HandlerList getHandlers() {
         return handlers;
@@ -48,7 +49,7 @@ public class OfflineCriteriaProgressChangeEvent extends Event {
     }
 
     /**
-     * @return Reciever UUID
+     * @return Receiver UUID
      */
     public UUID getUUID() {
         return uuid;

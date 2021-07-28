@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.Serial;
 import java.lang.reflect.Type;
 import java.util.*;
 
@@ -69,7 +70,7 @@ public final class AdvancementManager {
      */
     public static AdvancementManager getAccessibleManager(String name) {
         name = name.toLowerCase();
-        return accessible.containsKey(name) ? accessible.get(name) : null;
+        return accessible.getOrDefault(name, null);
     }
 
     public static Collection<AdvancementManager> getAccessibleManagers() {
@@ -93,8 +94,7 @@ public final class AdvancementManager {
      */
     @Deprecated(since = "1.13.10")
     public static AdvancementManager getNewAdvancementManager(Player... players) {
-        AdvancementManager manager = new AdvancementManager(players);
-        return manager;
+        return new AdvancementManager(players);
     }
 
     private static void check() {
@@ -103,6 +103,7 @@ public final class AdvancementManager {
         }
         if (progressListType == null) {
             progressListType = new TypeToken<HashMap<String, List<String>>>() {
+                @Serial
                 private static final long serialVersionUID = 5832697137241815078L;
             }.getType();
         }
@@ -184,13 +185,7 @@ public final class AdvancementManager {
      * @return All players that have been added to the manager
      */
     public ArrayList<Player> getPlayers() {
-        Iterator<Player> it = players.iterator();
-        while (it.hasNext()) {
-            Player p = it.next();
-            if (p == null || !p.isOnline()) {
-                it.remove();
-            }
-        }
+        players.removeIf(p -> p == null || !p.isOnline());
         return players;
     }
 
@@ -240,13 +235,13 @@ public final class AdvancementManager {
                 advancement.saveHiddenStatus(player, hidden);
 
                 if (!hidden || hiddenBoolean) {
-                    AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), showToast, display.isAnnouncedToChat(), hidden ? hiddenBoolean : false);
+                    AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), showToast, display.isAnnouncedToChat(), hidden && hiddenBoolean);
                     advDisplay.a(display.generateX() - getSmallestX(advancement.getTab()), display.generateY() - getSmallestY(advancement.getTab()));
 
                     AdvancementRewards advRewards = new AdvancementRewards(0, new MinecraftKey[0], new MinecraftKey[0], null);
 
                     Map<String, Criterion> advCriteria = new HashMap<>();
-                    String[][] advRequirements = new String[][]{};
+                    String[][] advRequirements;
 
                     if (advancement.getSavedCriteria() == null) {
                         for (int i = 0; i < advancement.getCriteria(); i++) {
@@ -380,7 +375,7 @@ public final class AdvancementManager {
             }
 
             Map<String, Criterion> advCriteria = new HashMap<>();
-            String[][] advRequirements = new String[][]{};
+            String[][] advRequirements;
 
             if (advancement.getSavedCriteria() == null) {
                 for (int i = 0; i < advancement.getCriteria(); i++) {
@@ -432,7 +427,7 @@ public final class AdvancementManager {
                 advancement.saveHiddenStatus(player, hidden);
 
                 if (!hidden || hiddenBoolean) {
-                    AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), showToast, display.isAnnouncedToChat(), hidden ? hiddenBoolean : false);
+                    AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), showToast, display.isAnnouncedToChat(), hidden && hiddenBoolean);
                     advDisplay.a(display.generateX() - getSmallestX(advancement.getTab()), display.generateY() - getSmallestY(advancement.getTab()));
 
                     net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
@@ -500,13 +495,7 @@ public final class AdvancementManager {
             NameKey rootAdvancement = CrazyAdvancements.getActiveTab(player);
             CrazyAdvancements.clearActiveTab(player);
             addPlayer(player);
-            Bukkit.getScheduler().runTaskLater(CrazyAdvancements.getInstance(), new Runnable() {
-
-                @Override
-                public void run() {
-                    CrazyAdvancements.setActiveTab(player, rootAdvancement);
-                }
-            }, 5);
+            Bukkit.getScheduler().runTaskLater(CrazyAdvancements.getInstance(), () -> CrazyAdvancements.setActiveTab(player, rootAdvancement), 5);
         }
     }
 
@@ -521,13 +510,7 @@ public final class AdvancementManager {
             NameKey rootAdvancement = CrazyAdvancements.getActiveTab(player);
             CrazyAdvancements.clearActiveTab(player);
             addPlayer(player, tab);
-            Bukkit.getScheduler().runTaskLater(CrazyAdvancements.getInstance(), new Runnable() {
-
-                @Override
-                public void run() {
-                    CrazyAdvancements.setActiveTab(player, rootAdvancement);
-                }
-            }, 5);
+            Bukkit.getScheduler().runTaskLater(CrazyAdvancements.getInstance(), () -> CrazyAdvancements.setActiveTab(player, rootAdvancement), 5);
         }
     }
 
@@ -587,7 +570,7 @@ public final class AdvancementManager {
                         }
 
                         Map<String, Criterion> advCriteria = new HashMap<>();
-                        String[][] advRequirements = new String[][]{};
+                        String[][] advRequirements;
 
                         if (advancement.getSavedCriteria() == null) {
                             for (int i = 0; i < advancement.getCriteria(); i++) {
@@ -619,7 +602,7 @@ public final class AdvancementManager {
                             advRequirements = advancement.getSavedCriteriaRequirements();
                         }
 
-                        AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), display.isToastShown(), display.isAnnouncedToChat(), hidden ? hiddenBoolean : false);
+                        AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), display.isToastShown(), display.isAnnouncedToChat(), hidden && hiddenBoolean);
                         advDisplay.a(display.generateX() - getSmallestX(advancement.getTab()), display.generateY() - getSmallestY(advancement.getTab()));
 
                         net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
@@ -693,7 +676,7 @@ public final class AdvancementManager {
                     }
 
                     Map<String, Criterion> advCriteria = new HashMap<>();
-                    String[][] advRequirements = new String[][]{};
+                    String[][] advRequirements;
 
                     if (advancement.getSavedCriteria() == null) {
                         for (int i = 0; i < advancement.getCriteria(); i++) {
@@ -728,7 +711,7 @@ public final class AdvancementManager {
 
                     boolean showToast = display.isToastShown();
 
-                    AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), showToast, display.isAnnouncedToChat(), hidden ? hiddenBoolean : false);
+                    AdvancementDisplay advDisplay = new AdvancementDisplay(icon, display.getTitle().getBaseComponent(), display.getDescription().getBaseComponent(), backgroundTexture, display.getFrame().getNMS(), showToast, display.isAnnouncedToChat(), hidden && hiddenBoolean);
                     advDisplay.a(display.generateX() - getSmallestX(advancement.getTab()), display.generateY() - getSmallestY(advancement.getTab()));
 
                     net.minecraft.advancements.Advancement adv = new net.minecraft.advancements.Advancement(advancement.getName().getMinecraftKey(), advancement.getParent() == null ? null : advancement.getParent().getSavedAdvancement(), advDisplay, advRewards, advCriteria, advRequirements);
@@ -768,13 +751,7 @@ public final class AdvancementManager {
      */
     public ArrayList<Advancement> getAdvancements(String namespace) {
         ArrayList<Advancement> advs = getAdvancements();
-        Iterator<Advancement> it = advs.iterator();
-        while (it.hasNext()) {
-            Advancement adv = it.next();
-            if (!adv.getName().getNamespace().equalsIgnoreCase(namespace)) {
-                it.remove();
-            }
-        }
+        advs.removeIf(adv -> !adv.getName().getNamespace().equalsIgnoreCase(namespace));
         return advs;
     }
 
@@ -870,7 +847,7 @@ public final class AdvancementManager {
 
     protected void checkAwarded(Player player, Advancement advancement) {
         Map<String, Criterion> advCriteria = new HashMap<>();
-        String[][] advRequirements = new String[][]{};
+        String[][] advRequirements;
 
         if (advancement.getSavedCriteria() == null) {
             for (int i = 0; i < advancement.getCriteria(); i++) {
@@ -910,7 +887,7 @@ public final class AdvancementManager {
 
     protected void checkAwarded(UUID uuid, Advancement advancement) {
         Map<String, Criterion> advCriteria = new HashMap<>();
-        String[][] advRequirements = new String[][]{};
+        String[][] advRequirements;
 
         if (advancement.getSavedCriteria() == null) {
             for (int i = 0; i < advancement.getCriteria(); i++) {
@@ -968,9 +945,7 @@ public final class AdvancementManager {
         Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 
         HashSet<String> awarded = advancement.getAwardedCriteria(player.getUniqueId());
-        for (String criterion : advancement.getSavedCriteria().keySet()) {
-            awarded.add(criterion);
-        }
+        awarded.addAll(advancement.getSavedCriteria().keySet());
         awardedCriteria.put(player.getUniqueId().toString(), awarded);
         advancement.setAwardedCriteria(awardedCriteria);
 
@@ -1008,9 +983,7 @@ public final class AdvancementManager {
             Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 
             HashSet<String> awarded = advancement.getAwardedCriteria(uuid);
-            for (String criterion : advancement.getSavedCriteria().keySet()) {
-                awarded.add(criterion);
-            }
+            awarded.addAll(advancement.getSavedCriteria().keySet());
             awardedCriteria.put(uuid.toString(), awarded);
             advancement.setAwardedCriteria(awardedCriteria);
 
@@ -1028,7 +1001,7 @@ public final class AdvancementManager {
     public void revokeAdvancement(Player player, Advancement advancement) {
         checkAwarded(player, advancement);
 
-        advancement.setAwardedCriteria(new HashMap<String, HashSet<String>>());
+        advancement.setAwardedCriteria(new HashMap<>());
 
         updateProgress(player, advancement);
         updateAllPossiblyAffectedVisibilities(player, advancement);
@@ -1049,7 +1022,7 @@ public final class AdvancementManager {
         } else {
             checkAwarded(uuid, advancement);
 
-            advancement.setAwardedCriteria(new HashMap<String, HashSet<String>>());
+            advancement.setAwardedCriteria(new HashMap<>());
 
             OfflineAdvancementRevokeEvent event = new OfflineAdvancementRevokeEvent(this, advancement, uuid);
             Bukkit.getPluginManager().callEvent(event);
@@ -1069,9 +1042,7 @@ public final class AdvancementManager {
         Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 
         HashSet<String> awarded = advancement.getAwardedCriteria(player.getUniqueId());
-        for (String criterion : criteria) {
-            awarded.add(criterion);
-        }
+        awarded.addAll(Arrays.asList(criteria));
         awardedCriteria.put(player.getUniqueId().toString(), awarded);
         advancement.setAwardedCriteria(awardedCriteria);
 
@@ -1098,9 +1069,7 @@ public final class AdvancementManager {
             Map<String, HashSet<String>> awardedCriteria = advancement.getAwardedCriteria();
 
             HashSet<String> awarded = advancement.getAwardedCriteria(uuid);
-            for (String criterion : criteria) {
-                awarded.add(criterion);
-            }
+            awarded.addAll(Arrays.asList(criteria));
             awardedCriteria.put(uuid.toString(), awarded);
             advancement.setAwardedCriteria(awardedCriteria);
 
@@ -1128,9 +1097,7 @@ public final class AdvancementManager {
 
         HashSet<String> awarded = advancement.getAwardedCriteria(player.getUniqueId());
         for (String criterion : criteria) {
-            if (awarded.contains(criterion)) {
-                awarded.remove(criterion);
-            }
+            awarded.remove(criterion);
         }
         awardedCriteria.put(player.getUniqueId().toString(), awarded);
         advancement.setAwardedCriteria(awardedCriteria);
@@ -1164,9 +1131,7 @@ public final class AdvancementManager {
 
             HashSet<String> awarded = advancement.getAwardedCriteria(uuid);
             for (String criterion : criteria) {
-                if (awarded.contains(criterion)) {
-                    awarded.remove(criterion);
-                }
+                awarded.remove(criterion);
             }
             awardedCriteria.put(uuid.toString(), awarded);
             advancement.setAwardedCriteria(awardedCriteria);
@@ -1357,9 +1322,8 @@ public final class AdvancementManager {
         }
 
         check();
-        String json = gson.toJson(prg);
 
-        return json;
+        return gson.toJson(prg);
     }
 
     /**
@@ -1391,9 +1355,8 @@ public final class AdvancementManager {
         }
 
         check();
-        String json = gson.toJson(prg);
 
-        return json;
+        return gson.toJson(prg);
     }
 
     /**
@@ -1462,7 +1425,7 @@ public final class AdvancementManager {
                         }
 
                         if (saveMethod == SaveMethod.DEFAULT) {
-                            grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+                            grantCriteria(player, advancement, loaded.toArray(new String[0]));
                         }
                     }
                 }
@@ -1520,7 +1483,7 @@ public final class AdvancementManager {
                         }
 
                         if (saveMethod == SaveMethod.DEFAULT) {
-                            grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+                            grantCriteria(player, advancement, loaded.toArray(new String[0]));
                         }
                     }
                 }
@@ -1539,11 +1502,10 @@ public final class AdvancementManager {
         if (advancementsLoaded.length == 0) {
             return;
         }
-        List<Advancement> advancements = Arrays.asList(advancementsLoaded);
 
         HashMap<String, List<String>> prg = getCustomProgress(json);
 
-        for (Advancement advancement : advancements) {
+        for (Advancement advancement : advancementsLoaded) {
             checkAwarded(player, advancement);
 
             String nameKey = advancement.getName().toString();
@@ -1573,7 +1535,7 @@ public final class AdvancementManager {
                 }
 
                 if (saveMethod == SaveMethod.DEFAULT) {
-                    grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+                    grantCriteria(player, advancement, loaded.toArray(new String[0]));
                 }
             }
         }
@@ -1618,7 +1580,7 @@ public final class AdvancementManager {
                 }
 
                 if (saveMethod == SaveMethod.DEFAULT) {
-                    grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+                    grantCriteria(player, advancement, loaded.toArray(new String[0]));
                 }
             }
         }
@@ -1667,7 +1629,7 @@ public final class AdvancementManager {
                     }
 
                     if (saveMethod == SaveMethod.DEFAULT) {
-                        grantCriteria(player, advancement, loaded.toArray(new String[loaded.size()]));
+                        grantCriteria(player, advancement, loaded.toArray(new String[0]));
                     }
                 }
             }
@@ -1686,9 +1648,7 @@ public final class AdvancementManager {
 
             check();
 
-            HashMap<String, List<String>> progressList = gson.fromJson(element, progressListType);
-
-            return progressList;
+            return gson.fromJson(element, progressListType);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new HashMap<>();
@@ -1697,9 +1657,8 @@ public final class AdvancementManager {
 
     private HashMap<String, List<String>> getCustomProgress(String json) {
         check();
-        HashMap<String, List<String>> progressList = gson.fromJson(json, progressListType);
 
-        return progressList;
+        return gson.fromJson(json, progressListType);
     }
 
     //Load Progress
@@ -1728,9 +1687,8 @@ public final class AdvancementManager {
         }
 
         check();
-        String json = gson.toJson(prg);
 
-        return json;
+        return gson.toJson(prg);
     }
 
     /**
@@ -1762,9 +1720,8 @@ public final class AdvancementManager {
         }
 
         check();
-        String json = gson.toJson(prg);
 
-        return json;
+        return gson.toJson(prg);
     }
 
     /**
@@ -1835,7 +1792,7 @@ public final class AdvancementManager {
                         }
 
                         if (saveMethod == SaveMethod.DEFAULT) {
-                            grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+                            grantCriteria(uuid, advancement, loaded.toArray(new String[0]));
                         }
                     }
                 }
@@ -1895,7 +1852,7 @@ public final class AdvancementManager {
                         }
 
                         if (saveMethod == SaveMethod.DEFAULT) {
-                            grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+                            grantCriteria(uuid, advancement, loaded.toArray(new String[0]));
                         }
                     }
                 }
@@ -1918,11 +1875,10 @@ public final class AdvancementManager {
         if (advancementsLoaded.length == 0) {
             return;
         }
-        List<Advancement> advancements = Arrays.asList(advancementsLoaded);
 
         HashMap<String, List<String>> prg = getCustomProgress(json);
 
-        for (Advancement advancement : advancements) {
+        for (Advancement advancement : advancementsLoaded) {
             checkAwarded(uuid, advancement);
 
             String nameKey = advancement.getName().toString();
@@ -1952,7 +1908,7 @@ public final class AdvancementManager {
                 }
 
                 if (saveMethod == SaveMethod.DEFAULT) {
-                    grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+                    grantCriteria(uuid, advancement, loaded.toArray(new String[0]));
                 }
             }
         }
@@ -1999,7 +1955,7 @@ public final class AdvancementManager {
                 }
 
                 if (saveMethod == SaveMethod.DEFAULT) {
-                    grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+                    grantCriteria(uuid, advancement, loaded.toArray(new String[0]));
                 }
             }
         }
@@ -2048,7 +2004,7 @@ public final class AdvancementManager {
                     }
 
                     if (saveMethod == SaveMethod.DEFAULT) {
-                        grantCriteria(uuid, advancement, loaded.toArray(new String[loaded.size()]));
+                        grantCriteria(uuid, advancement, loaded.toArray(new String[0]));
                     }
                 }
             }
@@ -2120,9 +2076,7 @@ public final class AdvancementManager {
 
             check();
 
-            HashMap<String, List<String>> progressList = gson.fromJson(element, progressListType);
-
-            return progressList;
+            return gson.fromJson(element, progressListType);
         } catch (Exception ex) {
             ex.printStackTrace();
             return new HashMap<>();

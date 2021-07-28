@@ -6,6 +6,8 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
+
 public class AdvancementTabChangeEvent extends Event implements Cancellable {
 
     public static final HandlerList handlers = new HandlerList();
@@ -23,6 +25,7 @@ public class AdvancementTabChangeEvent extends Event implements Cancellable {
         return handlers;
     }
 
+    @Nonnull
     @Override
     public HandlerList getHandlers() {
         return handlers;

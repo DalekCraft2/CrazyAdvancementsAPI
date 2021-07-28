@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
+
 public class AdvancementGrantEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
@@ -24,6 +26,7 @@ public class AdvancementGrantEvent extends Event {
         return handlers;
     }
 
+    @Nonnull
     @Override
     public HandlerList getHandlers() {
         return handlers;
@@ -44,7 +47,7 @@ public class AdvancementGrantEvent extends Event {
     }
 
     /**
-     * @return Reciever
+     * @return Receiver
      */
     public Player getPlayer() {
         return player;

@@ -5,6 +5,7 @@ import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class OfflineAdvancementGrantEvent extends Event {
@@ -23,6 +24,7 @@ public class OfflineAdvancementGrantEvent extends Event {
         return handlers;
     }
 
+    @Nonnull
     @Override
     public HandlerList getHandlers() {
         return handlers;
@@ -43,7 +45,7 @@ public class OfflineAdvancementGrantEvent extends Event {
     }
 
     /**
-     * @return Reciever UUID
+     * @return Receiver UUID
      */
     public UUID getUUID() {
         return uuid;

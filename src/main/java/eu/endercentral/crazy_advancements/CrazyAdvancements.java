@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.FileReader;
@@ -31,7 +32,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
     public static UUID CHAT_MESSAGE_UUID = new UUID(0, 0);
 
     private static CrazyAdvancements instance;
-    private static AdvancementPacketReceiver packetReciever;
+    private static AdvancementPacketReceiver packetReceiver;
     private static ArrayList<Player> initiatedPlayers = new ArrayList<>();
     private static ArrayList<AdvancementManager> managers = new ArrayList<>();
     private static boolean announceAdvancementMessages = true;
@@ -145,22 +146,18 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
 
     @Override
     public void onEnable() {
-        packetReciever = new AdvancementPacketReceiver();
+        packetReceiver = new AdvancementPacketReceiver();
 
         //Registering Players
-        Bukkit.getScheduler().runTaskLater(this, new Runnable() {
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            String path = CrazyAdvancements.getInstance().getDataFolder().getAbsolutePath() + File.separator + "advancements" + File.separator + "main" + File.separator;
+            File saveLocation = new File(path);
+            loadAdvancements(saveLocation);
 
-            @Override
-            public void run() {
-                String path = CrazyAdvancements.getInstance().getDataFolder().getAbsolutePath() + File.separator + "advancements" + File.separator + "main" + File.separator;
-                File saveLocation = new File(path);
-                loadAdvancements(saveLocation);
-
-                for (Player player : Bukkit.getOnlinePlayers()) {
-                    fileAdvancementManager.addPlayer(player);
-                    packetReciever.initPlayer(player);
-                    initiatedPlayers.add(player);
-                }
+            for (Player player : Bukkit.getOnlinePlayers()) {
+                fileAdvancementManager.addPlayer(player);
+                packetReceiver.initPlayer(player);
+                initiatedPlayers.add(player);
             }
         }, 5);
         //Registering Events
@@ -206,7 +203,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
         }
         PacketPlayOutAdvancements packet = new PacketPlayOutAdvancements(true, new ArrayList<>(), new HashSet<>(), new HashMap<>());
         for (Player p : Bukkit.getOnlinePlayers()) {
-            packetReciever.close(p, packetReciever.getHandlers().get(p.getName()));
+            packetReceiver.close(p, packetReceiver.getHandlers().get(p.getName()));
             ((CraftPlayer) p).getHandle().b.sendPacket(packet);
         }
     }
@@ -214,23 +211,17 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        Bukkit.getScheduler().runTaskLater(this, new Runnable() {
-
-            @Override
-            public void run() {
-                fileAdvancementManager.addPlayer(player);
-                initiatedPlayers.add(player);
-            }
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+            fileAdvancementManager.addPlayer(player);
+            initiatedPlayers.add(player);
         }, 5);
-        packetReciever.initPlayer(player);
+        packetReceiver.initPlayer(player);
     }
 
     @EventHandler
     public void quit(PlayerQuitEvent e) {
-        packetReciever.close(e.getPlayer(), packetReciever.getHandlers().get(e.getPlayer().getName()));
-		if (initiatedPlayers.contains(e.getPlayer())) {
-			initiatedPlayers.remove(e.getPlayer());
-		}
+        packetReceiver.close(e.getPlayer(), packetReceiver.getHandlers().get(e.getPlayer().getName()));
+        initiatedPlayers.remove(e.getPlayer());
     }
 
     private boolean startsWithSelector(String arg) {
@@ -243,7 +234,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+    public boolean onCommand(@Nonnull CommandSender sender, Command cmd, @Nonnull String label, String[] args) {
 
         if (cmd.getName().equalsIgnoreCase("showtoast")) {
             if (sender.hasPermission("crazyadvancements.command.*") || sender.hasPermission("crazyadvancements.command.showtoast")) {
@@ -252,9 +243,9 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
 
                     try {
                         if (startsWithSelector(args[0])) {
-                            String argsString = args[1];
+                            StringBuilder argsString = new StringBuilder(args[1]);
                             for (int i = 2; i < args.length; i++) {
-                                argsString += " " + args[i];
+                                argsString.append(" ").append(args[i]);
                             }
                             boolean opBefore = sender.isOp();
                             sender.setOp(true);
@@ -268,14 +259,14 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
                             Material mat = getMaterial(args[1]);
 
                             if (mat != null && mat.isItem()) {
-                                String message = args[2];
+                                StringBuilder message = new StringBuilder(args[2]);
                                 if (args.length > 3) {
                                     for (int i = 3; i < args.length; i++) {
-                                        message += " " + args[i];
+                                        message.append(" ").append(args[i]);
                                     }
                                 }
 
-                                AdvancementDisplay display = new AdvancementDisplay(mat, message, "", AdvancementFrame.TASK, true, true, AdvancementVisibility.ALWAYS);
+                                AdvancementDisplay display = new AdvancementDisplay(mat, message.toString(), "", AdvancementFrame.TASK, true, true, AdvancementVisibility.ALWAYS);
                                 Advancement advancement = new Advancement(null, new NameKey("toast", "message"), display);
                                 advancement.displayToast(player);
 
@@ -308,9 +299,9 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
 
                     try {
                         if (startsWithSelector(args[0])) {
-                            String argsString = args[1];
+                            StringBuilder argsString = new StringBuilder(args[1]);
                             for (int i = 2; i < args.length; i++) {
-                                argsString += " " + args[i];
+                                argsString.append(" ").append(args[i]);
                             }
                             boolean opBefore = sender.isOp();
                             sender.setOp(true);
@@ -342,12 +333,12 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
                                                 manager.revokeCriteria(player, advancement, convertedCriteria);
                                             }
 
-                                            String criteriaString = "�c" + convertedCriteria[0];
+                                            StringBuilder criteriaString = new StringBuilder("�c" + convertedCriteria[0]);
                                             if (convertedCriteria.length > 1) {
                                                 for (String criteria : Arrays.copyOfRange(convertedCriteria, 1, convertedCriteria.length - 1)) {
-                                                    criteriaString += "�a, �c" + criteria;
+                                                    criteriaString.append("�a, �c").append(criteria);
                                                 }
-                                                criteriaString += " �aand �c" + convertedCriteria[convertedCriteria.length - 1];
+                                                criteriaString.append(" �aand �c").append(convertedCriteria[convertedCriteria.length - 1]);
                                             }
 
                                             sender.sendMessage("�aSuccessfully " + (grant ? "granted" : "revoked") + " Criteria " + criteriaString + " �afor '�e" + advancement.getName() + "�a' " + (grant ? "to" : "from") + " �b" + player.getName());
@@ -395,7 +386,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender sender, Command cmd, String alias, String[] args) {
+    public List<String> onTabComplete(@Nonnull CommandSender sender, Command cmd, @Nonnull String alias, String[] args) {
         ArrayList<String> tab = new ArrayList<>();
 
         if (cmd.getName().equalsIgnoreCase("showtoast")) {

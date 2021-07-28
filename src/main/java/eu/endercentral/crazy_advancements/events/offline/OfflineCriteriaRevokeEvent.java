@@ -5,6 +5,7 @@ import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import javax.annotation.Nonnull;
 import java.util.UUID;
 
 public class OfflineCriteriaRevokeEvent extends Event {
@@ -25,6 +26,7 @@ public class OfflineCriteriaRevokeEvent extends Event {
         return handlers;
     }
 
+    @Nonnull
     @Override
     public HandlerList getHandlers() {
         return handlers;
@@ -52,7 +54,7 @@ public class OfflineCriteriaRevokeEvent extends Event {
     }
 
     /**
-     * @return Reciever
+     * @return Receiver
      */
     public UUID getUuid() {
         return uuid;
