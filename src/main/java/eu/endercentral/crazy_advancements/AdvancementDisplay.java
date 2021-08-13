@@ -205,9 +205,9 @@ public class AdvancementDisplay {
      * @return Icon {@link ItemStack}
      */
     public ItemStack getIcon() {
-		if (icon == null && iconID != null) {
-			icon = new ItemStack(iconID);
-		}
+        if (icon == null && iconID != null) {
+            icon = new ItemStack(iconID);
+        }
         return icon;
     }
 
@@ -498,6 +498,5 @@ public class AdvancementDisplay {
         }
 
     }
-
 
 }

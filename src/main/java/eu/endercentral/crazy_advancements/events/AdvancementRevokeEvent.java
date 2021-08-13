@@ -14,6 +14,7 @@ public class AdvancementRevokeEvent extends Event {
     private final AdvancementManager manager;
     private final Advancement advancement;
     private final Player player;
+
     public AdvancementRevokeEvent(AdvancementManager advancementManager_v2, Advancement advancement, Player player) {
         this.manager = advancementManager_v2;
         this.advancement = advancement;
@@ -50,6 +51,5 @@ public class AdvancementRevokeEvent extends Event {
     public Player getPlayer() {
         return player;
     }
-
 
 }

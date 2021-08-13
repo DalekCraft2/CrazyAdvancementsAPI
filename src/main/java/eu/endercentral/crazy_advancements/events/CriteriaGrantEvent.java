@@ -15,6 +15,7 @@ public class CriteriaGrantEvent extends Event {
     private final Advancement advancement;
     private final String[] criteria;
     private final Player player;
+
     public CriteriaGrantEvent(AdvancementManager manager, Advancement advancement, String[] criteria, Player player) {
         this.manager = manager;
         this.advancement = advancement;
@@ -59,6 +60,5 @@ public class CriteriaGrantEvent extends Event {
     public Player getPlayer() {
         return player;
     }
-
 
 }

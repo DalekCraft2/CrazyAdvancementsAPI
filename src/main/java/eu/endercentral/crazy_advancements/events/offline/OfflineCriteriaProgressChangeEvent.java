@@ -16,6 +16,7 @@ public class OfflineCriteriaProgressChangeEvent extends Event {
     private final UUID uuid;
     private final int progressBefore;
     private int progress;
+
     public OfflineCriteriaProgressChangeEvent(AdvancementManager manager, Advancement advancement, UUID uuid, int progressBefore, int progress) {
         this.manager = manager;
         this.advancement = advancement;
@@ -77,6 +78,5 @@ public class OfflineCriteriaProgressChangeEvent extends Event {
     public void setProgress(int progress) {
         this.progress = progress;
     }
-
 
 }

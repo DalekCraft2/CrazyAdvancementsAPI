@@ -15,6 +15,7 @@ public class OfflineCriteriaGrantEvent extends Event {
     private final Advancement advancement;
     private final String[] criteria;
     private final UUID uuid;
+
     public OfflineCriteriaGrantEvent(AdvancementManager manager, Advancement advancement, String[] criteria, UUID uuid) {
         this.manager = manager;
         this.advancement = advancement;
@@ -59,6 +60,5 @@ public class OfflineCriteriaGrantEvent extends Event {
     public UUID getUuid() {
         return uuid;
     }
-
 
 }

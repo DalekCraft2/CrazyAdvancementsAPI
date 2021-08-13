@@ -472,5 +472,4 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
         return null;
     }
 
-
 }

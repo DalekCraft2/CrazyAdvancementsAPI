@@ -14,6 +14,7 @@ public class OfflineAdvancementGrantEvent extends Event {
     private final AdvancementManager manager;
     private final Advancement advancement;
     private final UUID uuid;
+
     public OfflineAdvancementGrantEvent(AdvancementManager manager, Advancement advancement, UUID uuid) {
         this.manager = manager;
         this.advancement = advancement;
@@ -50,6 +51,5 @@ public class OfflineAdvancementGrantEvent extends Event {
     public UUID getUUID() {
         return uuid;
     }
-
 
 }

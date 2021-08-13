@@ -15,6 +15,7 @@ public class OfflineCriteriaRevokeEvent extends Event {
     private final Advancement advancement;
     private final String[] criteria;
     private final UUID uuid;
+
     public OfflineCriteriaRevokeEvent(AdvancementManager manager, Advancement advancement, String[] criteria, UUID uuid) {
         this.manager = manager;
         this.advancement = advancement;
@@ -59,6 +60,5 @@ public class OfflineCriteriaRevokeEvent extends Event {
     public UUID getUuid() {
         return uuid;
     }
-
 
 }

@@ -28,5 +28,4 @@ public class UnloadProgressFailedException extends RuntimeException {
         return "Failed to unload Advancement Progress for Player with UUID " + uuid + ": " + message;
     }
 
-
 }
