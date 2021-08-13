@@ -5,7 +5,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
-import eu.endercentral.crazy_advancements.AdvancementDisplay.AdvancementFrame;
+import eu.endercentral.crazy_advancements.manager.AdvancementManager;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -71,9 +71,9 @@ public class Advancement {
      */
     public Advancement(@Nullable Advancement parent, NameKey name, AdvancementDisplay display) {
         this.parent = parent;
-		if (this.parent != null) {
-			this.parent.addChildren(this);
-		}
+        if (this.parent != null) {
+            this.parent.addChildren(this);
+        }
         this.parentKey = parent == null ? null : parent.getName().toString();
         this.name = name;
         this.nameKey = name.toString();
@@ -111,9 +111,9 @@ public class Advancement {
         this.name = new NameKey(nameKey);
         advancementMap.put(nameKey, this);
         this.parent = advancementMap.get(parentKey);
-		if (this.parent != null) {
-			this.parent.addChildren(this);
-		}
+        if (this.parent != null) {
+            this.parent.addChildren(this);
+        }
 
         this.display.setVisibility(AdvancementVisibility.parseVisibility(this.display.visibilityIdentifier));
     }
@@ -230,7 +230,6 @@ public class Advancement {
      */
     public BaseComponent getMessage(Player player) {
         String translation = "chat.type.advancement." + display.getFrame().name().toLowerCase();
-        boolean challenge = getDisplay().getFrame() == AdvancementFrame.CHALLENGE;
 
         TranslatableComponent message = new TranslatableComponent();
         message.setTranslate(translation);
@@ -238,7 +237,10 @@ public class Advancement {
         TextComponent title = new TextComponent("[");
         title.addExtra(display.getTitle().getJson());
         title.addExtra("]");
-        title.setColor(challenge ? ChatColor.DARK_PURPLE : ChatColor.GREEN);
+        switch (getDisplay().getFrame()) {
+            case TASK, GOAL -> title.setColor(ChatColor.GREEN);
+            case CHALLENGE -> title.setColor(ChatColor.DARK_PURPLE);
+        }
         BaseComponent titleTextComponent = display.getTitle().getJson();
         titleTextComponent.setColor(title.getColor());
         Text titleText = new Text(new BaseComponent[]{titleTextComponent});
@@ -336,19 +338,23 @@ public class Advancement {
         return getRootAdvancement().getName();
     }
 
-    //	public boolean isAnythingGrantedUntil(AdvancementManager manager, Player player) {
-    //		for(Advancement until : getRowUntil()) {
-    //			if(manager.getCriteriaProgress(player, until) >= getCriteria()) return true;
-    //		}
-    //		return false;
-    //	}
-    //
-    //	public boolean isAnythingGrantedAfter(AdvancementManager manager, Player player) {
-    //		for(Advancement after : getRowAfter()) {
-    //			if(manager.getCriteriaProgress(player, after) >= getCriteria()) return true;
-    //		}
-    //		return false;
-    //	}
+    public boolean isAnythingGrantedUntil(AdvancementManager manager, Player player) {
+        for (Advancement until : getRowUntil()) {
+            if (manager.getCriteriaProgress(player, until) >= getCriteria()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isAnythingGrantedAfter(AdvancementManager manager, Player player) {
+        for (Advancement after : getRowAfter()) {
+            if (manager.getCriteriaProgress(player, after) >= getCriteria()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
 
     //Saved
@@ -361,17 +367,17 @@ public class Advancement {
         row.add(this);
         if (getParent() != null) {
             for (Advancement untilRow : getParent().getRowUntil()) {
-				if (!row.contains(untilRow)) {
-					row.add(untilRow);
-				}
+                if (!row.contains(untilRow)) {
+                    row.add(untilRow);
+                }
             }
             Collections.reverse(row);
         }
         for (Advancement child : getChildren()) {
             for (Advancement afterRow : child.getRowAfter()) {
-				if (!row.contains(afterRow)) {
-					row.add(afterRow);
-				}
+                if (!row.contains(afterRow)) {
+                    row.add(afterRow);
+                }
             }
         }
         return row;
@@ -385,9 +391,9 @@ public class Advancement {
         row.add(this);
         if (getParent() != null) {
             for (Advancement untilRow : getParent().getRowUntil()) {
-				if (!row.contains(untilRow)) {
-					row.add(untilRow);
-				}
+                if (!row.contains(untilRow)) {
+                    row.add(untilRow);
+                }
             }
         }
         return row;
@@ -401,9 +407,9 @@ public class Advancement {
         row.add(this);
         for (Advancement child : getChildren()) {
             for (Advancement afterRow : child.getRowAfter()) {
-				if (!row.contains(afterRow)) {
-					row.add(afterRow);
-				}
+                if (!row.contains(afterRow)) {
+                    row.add(afterRow);
+                }
             }
         }
         return row;
@@ -415,9 +421,9 @@ public class Advancement {
      */
     public boolean isAnythingGrantedUntil(Player player) {
         for (Advancement until : getRowUntil()) {
-			if (until.isGranted(player)) {
-				return true;
-			}
+            if (until.isGranted(player)) {
+                return true;
+            }
         }
         return false;
     }
@@ -428,28 +434,28 @@ public class Advancement {
      */
     public boolean isAnythingGrantedAfter(Player player) {
         for (Advancement after : getRowAfter()) {
-			if (after.isGranted(player)) {
-				return true;
-			}
+            if (after.isGranted(player)) {
+                return true;
+            }
         }
         return false;
     }
 
     @Warning(reason = "Only use if you know what you are doing!")
     public void saveHiddenStatus(Player player, boolean hidden) {
-		if (savedHiddenStatus == null) {
-			savedHiddenStatus = new HashMap<>();
-		}
+        if (savedHiddenStatus == null) {
+            savedHiddenStatus = new HashMap<>();
+        }
         savedHiddenStatus.put(player.getUniqueId().toString(), hidden);
     }
 
     public boolean getHiddenStatus(Player player) {
-		if (savedHiddenStatus == null) {
-			savedHiddenStatus = new HashMap<>();
-		}
-		if (!savedHiddenStatus.containsKey(player.getUniqueId().toString())) {
-			savedHiddenStatus.put(player.getUniqueId().toString(), getDisplay().isVisible(player, this));
-		}
+        if (savedHiddenStatus == null) {
+            savedHiddenStatus = new HashMap<>();
+        }
+        if (!savedHiddenStatus.containsKey(player.getUniqueId().toString())) {
+            savedHiddenStatus.put(player.getUniqueId().toString(), getDisplay().isVisible(player, this));
+        }
         return savedHiddenStatus.get(player.getUniqueId().toString());
     }
 
@@ -486,16 +492,16 @@ public class Advancement {
     //Player Actions
 
     public HashSet<String> getAwardedCriteria(UUID uuid) {
-		if (!getAwardedCriteria().containsKey(uuid.toString())) {
-			getAwardedCriteria().put(uuid.toString(), new HashSet<>());
-		}
+        if (!getAwardedCriteria().containsKey(uuid.toString())) {
+            getAwardedCriteria().put(uuid.toString(), new HashSet<>());
+        }
         return getAwardedCriteria().get(uuid.toString());
     }
 
     public Map<String, HashSet<String>> getAwardedCriteria() {
-		if (awardedCriteria == null) {
-			awardedCriteria = new HashMap<>();
-		}
+        if (awardedCriteria == null) {
+            awardedCriteria = new HashMap<>();
+        }
         return awardedCriteria;
     }
 
@@ -506,39 +512,39 @@ public class Advancement {
 
     @Warning(reason = "Only use if you know what you are doing!")
     public void unsetAwardedCriteria(UUID uuid) {
-		if (this.awardedCriteria == null) {
-			this.awardedCriteria = new HashMap<>();
-		}
+        if (this.awardedCriteria == null) {
+            this.awardedCriteria = new HashMap<>();
+        }
         this.awardedCriteria.remove(uuid.toString());
     }
 
     public AdvancementProgress getProgress(Player player) {
-		if (this.progress == null) {
-			progress = new HashMap<>();
-		}
+        if (this.progress == null) {
+            progress = new HashMap<>();
+        }
         return this.progress.containsKey(player.getUniqueId().toString()) ? this.progress.get(player.getUniqueId().toString()) : new AdvancementProgress();
     }
 
     public AdvancementProgress getProgress(UUID uuid) {
-		if (this.progress == null) {
-			progress = new HashMap<>();
-		}
+        if (this.progress == null) {
+            progress = new HashMap<>();
+        }
         return this.progress.containsKey(uuid.toString()) ? this.progress.get(uuid.toString()) : new AdvancementProgress();
     }
 
     @Warning(reason = "Only use if you know what you are doing!")
     public void setProgress(Player player, AdvancementProgress progress) {
-		if (this.progress == null) {
-			this.progress = new HashMap<>();
-		}
+        if (this.progress == null) {
+            this.progress = new HashMap<>();
+        }
         this.progress.put(player.getUniqueId().toString(), progress);
     }
 
     @Warning(reason = "Only use if you know what you are doing!")
     public void unsetProgress(UUID uuid) {
-		if (this.progress == null) {
-			this.progress = new HashMap<>();
-		}
+        if (this.progress == null) {
+            this.progress = new HashMap<>();
+        }
         this.progress.remove(uuid.toString());
     }
 
