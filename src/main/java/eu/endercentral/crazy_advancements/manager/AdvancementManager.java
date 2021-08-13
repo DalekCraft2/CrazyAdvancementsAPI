@@ -63,7 +63,7 @@ public final class AdvancementManager {
     }
 
     /**
-     * Gets an accessible Advancement Manager by it's Name
+     * Gets an accessible Advancement Manager by its Name
      *
      * @param name
      * @return
@@ -802,7 +802,7 @@ public final class AdvancementManager {
     /**
      * Makes the AdvancementManager accessible
      *
-     * @param name Unique Name, case insensitive
+     * @param name Unique Name, case-insensitive
      */
     public void makeAccessible(String name) {
         name = name.toLowerCase();
@@ -845,7 +845,7 @@ public final class AdvancementManager {
         return null;
     }
 
-    protected void checkAwarded(Player player, Advancement advancement) {
+    private void checkAwarded(Player player, Advancement advancement) {
         Map<String, Criterion> advCriteria = new HashMap<>();
         String[][] advRequirements;
 
@@ -885,7 +885,7 @@ public final class AdvancementManager {
         }
     }
 
-    protected void checkAwarded(UUID uuid, Advancement advancement) {
+    private void checkAwarded(UUID uuid, Advancement advancement) {
         Map<String, Criterion> advCriteria = new HashMap<>();
         String[][] advRequirements;
 
@@ -1437,7 +1437,7 @@ public final class AdvancementManager {
      * Loads the progress
      *
      * @param player             Player to check
-     * @param advancementsLoaded Array of advancements to check, all advancements which arent in the same namespace as the first one will be ignored
+     * @param advancementsLoaded Array of advancements to check, all advancements which aren't in the same namespace as the first one will be ignored
      */
     public void loadProgress(Player player, Advancement... advancementsLoaded) {
         if (advancementsLoaded.length == 0) {
@@ -1805,7 +1805,7 @@ public final class AdvancementManager {
      * <b>Recommended to only load progress for online players!</b>
      *
      * @param uuid               Player UUID to check
-     * @param advancementsLoaded Array of advancements to check, all advancements which arent in the same namespace as the first one will be ignored
+     * @param advancementsLoaded Array of advancements to check, all advancements which aren't in the same namespace as the first one will be ignored
      */
     @Deprecated
     public void loadProgress(UUID uuid, Advancement... advancementsLoaded) {
