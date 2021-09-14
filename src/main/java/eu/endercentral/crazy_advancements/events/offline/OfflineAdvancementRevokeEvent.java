@@ -8,6 +8,9 @@ import org.bukkit.event.HandlerList;
 import javax.annotation.Nonnull;
 import java.util.UUID;
 
+/**
+ * This {@link Event} is called whenever an {@link Advancement} is revoked from an {@link org.bukkit.OfflinePlayer}.
+ */
 public class OfflineAdvancementRevokeEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
@@ -32,21 +35,27 @@ public class OfflineAdvancementRevokeEvent extends Event {
     }
 
     /**
-     * @return The Manager this event has been fired from
+     * Returns the {@link AdvancementManager} which is firing this {@link Event}.
+     *
+     * @return the {@link AdvancementManager} which is firing this {@link Event}
      */
     public AdvancementManager getManager() {
         return manager;
     }
 
     /**
-     * @return The Advancement that has been revoked
+     * Returns the {@link Advancement} that is being revoked.
+     *
+     * @return the {@link Advancement} that is being revoked
      */
     public Advancement getAdvancement() {
         return advancement;
     }
 
     /**
-     * @return Receiver UUID
+     * Returns the {@link UUID} of the {@link org.bukkit.entity.Player} from whom the {@link Advancement} is being revoked.
+     *
+     * @return the {@link UUID} of the {@link org.bukkit.entity.Player} from whom the {@link Advancement} is being revoked
      */
     public UUID getUUID() {
         return uuid;

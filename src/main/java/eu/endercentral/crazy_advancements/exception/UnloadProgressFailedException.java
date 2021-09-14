@@ -3,11 +3,11 @@ package eu.endercentral.crazy_advancements.exception;
 import java.io.Serial;
 import java.util.UUID;
 
+/**
+ * An {@link UnloadProgressFailedException} is thrown when an {@link eu.endercentral.crazy_advancements.manager.AdvancementManager} fails to unload a {@link org.bukkit.entity.Player}'s {@link eu.endercentral.crazy_advancements.Advancement} progress.
+ */
 public class UnloadProgressFailedException extends RuntimeException {
 
-    /**
-     *
-     */
     @Serial
     private static final long serialVersionUID = 5052062325162108824L;
 

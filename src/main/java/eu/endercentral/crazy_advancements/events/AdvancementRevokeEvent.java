@@ -8,6 +8,9 @@ import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nonnull;
 
+/**
+ * This {@link Event} is called whenever an {@link Advancement} is revoked from a {@link Player}.
+ */
 public class AdvancementRevokeEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
@@ -32,21 +35,27 @@ public class AdvancementRevokeEvent extends Event {
     }
 
     /**
-     * @return The Manager this event has been fired from
+     * Returns the {@link AdvancementManager} which is firing this {@link Event}.
+     *
+     * @return the {@link AdvancementManager} which is firing this {@link Event}
      */
     public AdvancementManager getManager() {
         return manager;
     }
 
     /**
-     * @return The Advancement that has been revoked
+     * Returns the {@link Advancement} that is being revoked.
+     *
+     * @return the {@link Advancement} that is being revoked
      */
     public Advancement getAdvancement() {
         return advancement;
     }
 
     /**
-     * @return Receiver
+     * Returns the {@link Player} from whom the {@link Advancement} is being revoked.
+     *
+     * @return the {@link Player} from whom the {@link Advancement} is being revoked
      */
     public Player getPlayer() {
         return player;

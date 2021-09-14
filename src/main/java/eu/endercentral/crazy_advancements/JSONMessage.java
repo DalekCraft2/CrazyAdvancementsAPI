@@ -10,7 +10,7 @@ public class JSONMessage {
     private final BaseComponent json;
 
     /**
-     * @param json A JSON representation of an in-game Message
+     * @param json a JSON representation of an in-game message
      * @see <a href="https://github.com/skylinerw/guides/blob/master/java/text%20component.md">Text Component</a>
      */
     public JSONMessage(BaseComponent json) {
@@ -18,14 +18,14 @@ public class JSONMessage {
     }
 
     /**
-     * @return the JSON representation of an in-game Message
+     * @return the JSON representation of an in-game message
      */
     public BaseComponent getJson() {
         return json;
     }
 
     /**
-     * @return An {@link IChatBaseComponent} representation of an in-game Message
+     * @return an {@link IChatBaseComponent} representation of an in-game message
      */
     public IChatBaseComponent getBaseComponent() {
         return ChatSerializer.a(ComponentSerializer.toString(json));

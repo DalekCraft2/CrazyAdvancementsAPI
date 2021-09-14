@@ -117,7 +117,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
     }
 
     /**
-     * @return <b>true</b> if advancement messages should be shown by default<br><b>false</b> if all advancement messages will be hidden
+     * @return {@code true} if advancement messages should be shown by default<br><b>false</b> if all advancement messages will be hidden
      */
     public static boolean isAnnounceAdvancementMessages() {
         return announceAdvancementMessages;
@@ -235,9 +235,9 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
     }
 
     @Override
-    public boolean onCommand(@Nonnull CommandSender sender, Command cmd, @Nonnull String label, String[] args) {
+    public boolean onCommand(@Nonnull CommandSender sender, Command command, @Nonnull String label, String[] args) {
 
-        if (cmd.getName().equalsIgnoreCase("showtoast")) {
+        if (command.getName().equalsIgnoreCase("showtoast")) {
             if (sender.hasPermission("crazyadvancements.command.*") || sender.hasPermission("crazyadvancements.command.showtoast")) {
                 if (args.length >= 3) {
 
@@ -285,7 +285,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
 
 
                 } else {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: &r" + cmd.getUsage()));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: &r" + command.getUsage()));
                 }
             } else {
                 sender.sendMessage(noPermission);
@@ -293,8 +293,8 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
             return true;
         }
 
-        if (cmd.getName().equalsIgnoreCase("cagrant") || cmd.getName().equalsIgnoreCase("carevoke")) {
-            boolean grant = cmd.getName().equalsIgnoreCase("cagrant");
+        if (command.getName().equalsIgnoreCase("cagrant") || command.getName().equalsIgnoreCase("carevoke")) {
+            boolean grant = command.getName().equalsIgnoreCase("cagrant");
             if (sender.hasPermission("crazyadvancements.command.*") || sender.hasPermission("crazyadvancements.command.grantrevoke")) {
                 if (args.length >= 3) {
 
@@ -375,7 +375,7 @@ public final class CrazyAdvancements extends JavaPlugin implements Listener {
                     }
 
                 } else {
-                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: &r" + cmd.getUsage()));
+                    sender.sendMessage(ChatColor.translateAlternateColorCodes('&', "&cUsage: &r" + command.getUsage()));
                 }
             } else {
                 sender.sendMessage(noPermission);

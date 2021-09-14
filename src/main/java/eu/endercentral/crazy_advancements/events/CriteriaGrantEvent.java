@@ -8,6 +8,9 @@ import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nonnull;
 
+/**
+ * This {@link Event} is called whenever criteria are granted to a {@link Player}.
+ */
 public class CriteriaGrantEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
@@ -34,28 +37,36 @@ public class CriteriaGrantEvent extends Event {
     }
 
     /**
-     * @return The Manager this event has been fired from
+     * Returns the {@link AdvancementManager} which is firing this {@link Event}.
+     *
+     * @return the {@link AdvancementManager} which is firing this {@link Event}
      */
     public AdvancementManager getManager() {
         return manager;
     }
 
     /**
-     * @return Advancement
+     * Returns the {@link Advancement} to which the criteria belong.
+     *
+     * @return the {@link Advancement} to which the criteria belong
      */
     public Advancement getAdvancement() {
         return advancement;
     }
 
     /**
-     * @return Granted Criteria
+     * Returns the criteria that is being granted.
+     *
+     * @return the criteria that is being granted
      */
     public String[] getCriteria() {
         return criteria;
     }
 
     /**
-     * @return Receiver
+     * Returns the {@link Player} to whom the criteria is being granted.
+     *
+     * @return the {@link Player} to whom the criteria is being granted
      */
     public Player getPlayer() {
         return player;

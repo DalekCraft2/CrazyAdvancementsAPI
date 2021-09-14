@@ -10,8 +10,8 @@ public class NameKey {
     private transient MinecraftKey mcKey;
 
     /**
-     * @param namespace The namespace, choose something representing your plugin/project
-     * @param key       The Unique key inside your namespace
+     * @param namespace the namespace. Choose something representing your plugin/project.
+     * @param key       the unique key inside your namespace
      */
     public NameKey(String namespace, String key) {
         this.namespace = namespace.toLowerCase();
@@ -19,7 +19,7 @@ public class NameKey {
     }
 
     /**
-     * @param key The key inside the default namespace "minecraft" or a NameSpacedKey separated by a colon
+     * @param key the key inside the default namespace "minecraft", or a {@link org.bukkit.NamespacedKey} separated by a colon
      */
     public NameKey(String key) {
         String[] split = key.split(":");

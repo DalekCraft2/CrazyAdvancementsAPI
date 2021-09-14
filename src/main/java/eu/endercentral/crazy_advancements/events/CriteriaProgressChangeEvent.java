@@ -8,6 +8,9 @@ import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nonnull;
 
+/**
+ * This {@link Event} is called whenever an {@link Player}'s criteria progress is changed.
+ */
 public class CriteriaProgressChangeEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
@@ -36,44 +39,54 @@ public class CriteriaProgressChangeEvent extends Event {
     }
 
     /**
-     * @return The Manager this event has been fired from
+     * Returns the {@link AdvancementManager} which is firing this {@link Event}.
+     *
+     * @return the {@link AdvancementManager} which is firing this {@link Event}
      */
     public AdvancementManager getManager() {
         return manager;
     }
 
     /**
-     * @return The Advancement that has been granted
+     * Returns the {@link Advancement} that is being granted.
+     *
+     * @return the {@link Advancement} that is being granted
      */
     public Advancement getAdvancement() {
         return advancement;
     }
 
     /**
-     * @return Receiver
+     * Returns the {@link Player} to whom the {@link Advancement} is being granted.
+     *
+     * @return the {@link Player} to whom the {@link Advancement} is being granted
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
-     * @return The progress before it has been changed
+     * Returns the {@link Player}'s initial progress.
+     *
+     * @return the {@link Player}'s initial progress
      */
     public int getProgressBefore() {
         return progressBefore;
     }
 
     /**
-     * @return The new progress
+     * Returns the {@link Player}'s new progress.
+     *
+     * @return the {@link Player}'s new progress
      */
     public int getProgress() {
         return progress;
     }
 
     /**
-     * Sets the progress
+     * Sets the {@link Player}'s progress.
      *
-     * @param progress The new progress
+     * @param progress the new progress value
      */
     public void setProgress(int progress) {
         this.progress = progress;

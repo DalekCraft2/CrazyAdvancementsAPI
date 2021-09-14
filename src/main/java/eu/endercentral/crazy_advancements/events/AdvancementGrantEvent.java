@@ -8,6 +8,9 @@ import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nonnull;
 
+/**
+ * This {@link Event} is called whenever an {@link Advancement} is granted to a {@link Player}.
+ */
 public class AdvancementGrantEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
@@ -34,27 +37,35 @@ public class AdvancementGrantEvent extends Event {
     }
 
     /**
-     * @return The Manager this event has been fired from
+     * Returns the {@link AdvancementManager} which is firing this {@link Event}.
+     *
+     * @return the {@link AdvancementManager} which is firing this {@link Event}
      */
     public AdvancementManager getManager() {
         return manager;
     }
 
     /**
-     * @return The Advancement that has been granted
+     * Returns the {@link Advancement} that is being granted.
+     *
+     * @return the {@link Advancement} that is being granted
      */
     public Advancement getAdvancement() {
         return advancement;
     }
 
     /**
-     * @return Receiver
+     * Returns the {@link Player} to whom the {@link Advancement} is being granted.
+     *
+     * @return the {@link Player} to whom the {@link Advancement} is being granted
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
+     * Returns whether a message will be displayed.
+     *
      * @return true if a message will be displayed
      */
     public boolean isDisplayMessage() {
@@ -62,9 +73,9 @@ public class AdvancementGrantEvent extends Event {
     }
 
     /**
-     * Sets if a message will be displayed
+     * Sets whether a message will be displayed.
      *
-     * @param displayMessage
+     * @param displayMessage whether the message will be displayed
      */
     public void setDisplayMessage(boolean displayMessage) {
         this.displayMessage = displayMessage;

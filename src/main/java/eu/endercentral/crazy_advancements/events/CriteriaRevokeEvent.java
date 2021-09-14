@@ -8,6 +8,9 @@ import org.bukkit.event.HandlerList;
 
 import javax.annotation.Nonnull;
 
+/**
+ * This {@link Event} is called whenever criteria are revoked from a {@link Player}.
+ */
 public class CriteriaRevokeEvent extends Event {
 
     public static final HandlerList handlers = new HandlerList();
@@ -34,28 +37,36 @@ public class CriteriaRevokeEvent extends Event {
     }
 
     /**
-     * @return The Manager this event has been fired from
+     * Returns the {@link AdvancementManager} which is firing this {@link Event}.
+     *
+     * @return the {@link AdvancementManager} which is firing this {@link Event}
      */
     public AdvancementManager getManager() {
         return manager;
     }
 
     /**
-     * @return Advancement
+     * Returns the {@link Advancement} to which the criteria belong.
+     *
+     * @return the {@link Advancement} to which the criteria belong
      */
     public Advancement getAdvancement() {
         return advancement;
     }
 
     /**
-     * @return Revoked Criteria
+     * Returns the criteria that is being revoked.
+     *
+     * @return the criteria that is being revoked
      */
     public String[] getCriteria() {
         return criteria;
     }
 
     /**
-     * @return Receiver
+     * Returns the {@link Player} from whom the criteria is being revoked.
+     *
+     * @return the {@link Player} from whom the criteria is being revoked
      */
     public Player getPlayer() {
         return player;

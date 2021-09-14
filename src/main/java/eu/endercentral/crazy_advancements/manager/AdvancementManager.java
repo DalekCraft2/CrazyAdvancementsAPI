@@ -53,7 +53,9 @@ public final class AdvancementManager {
     private ArrayList<Advancement> advancements = new ArrayList<>();
 
     /**
-     * @param players All players that should be in the new manager from the start, can be changed at any time
+     * Constructor.
+     *
+     * @param players all {@link Player}s that should be in the new {@link AdvancementManager} from the start; can be changed at any time.
      */
     public AdvancementManager(Player... players) {
         this.players = new ArrayList<>();
@@ -63,16 +65,21 @@ public final class AdvancementManager {
     }
 
     /**
-     * Gets an accessible Advancement Manager by its Name
+     * Gets an accessible {@link AdvancementManager} by its name.
      *
-     * @param name
-     * @return
+     * @param name the name of the {@link AdvancementManager}
+     * @return the {@link AdvancementManager} with the given name
      */
     public static AdvancementManager getAccessibleManager(String name) {
         name = name.toLowerCase();
         return accessible.getOrDefault(name, null);
     }
 
+    /**
+     * Gets a {@link Collection} of all {@link AdvancementManager}s.
+     *
+     * @return a {@link Collection} of all {@link AdvancementManager}s
+     */
     public static Collection<AdvancementManager> getAccessibleManagers() {
         return accessible.values();
     }
@@ -86,11 +93,11 @@ public final class AdvancementManager {
     }
 
     /**
-     * Creates a new instance of an advancement manager
+     * Constructs a new {@link AdvancementManager}.
      *
-     * @param players All players that should be in the new manager from the start, can be changed at any time
-     * @return the generated advancement manager
-     * @deprecated Use the AdvancementManager constructor instead of this method
+     * @param players all {@link Player}s that should be in the new {@link AdvancementManager} from the start; can be changed at any time.
+     * @return the generated {@link AdvancementManager}
+     * @deprecated Use {@link #AdvancementManager(Player... players)} instead of this method
      */
     @Deprecated(since = "1.13.10")
     public static AdvancementManager getNewAdvancementManager(Player... players) {
@@ -110,79 +117,99 @@ public final class AdvancementManager {
     }
 
     /**
-     * Gets the boolean that is passed via the advancement packet when an advancement is hidden<br>Default: false
+     * Gets the boolean that is passed via the {@link PacketPlayOutAdvancements Advancement Packet} when an {@link Advancement} is hidden.
+     * <p>
+     * Default: {@code false}
      *
-     * @return
+     * @return the boolean that is passed via the {@link PacketPlayOutAdvancements Advancement Packet} when an {@link Advancement} is hidden
      */
     public boolean getHiddenBoolean() {
         return hiddenBoolean;
     }
 
     /**
-     * Sets the boolean that is passed via the advancement packet when an advancement is hidden<br>Default: false<br>When set to true, hidden advancements that have not been granted yet, will have a line drawn to them even though they aren't displayed yet, when they should be visible (according to their {@link AdvancementVisibility})<br>Can be used to create an empty advancement tab where there are no advancements visible and no lines visible, when the tab only has a hidden advancement as a root
+     * Sets the boolean that is passed via the {@link PacketPlayOutAdvancements Advancement Packet} when an {@link Advancement} is hidden.
+     * <p>
+     * Default: {@code false}
+     * <p>
+     * When set to {@code true}, hidden {@link Advancement}s that have not been granted yet will have a line drawn to them even though they aren't displayed yet, when they should be visible (according to their {@link AdvancementVisibility}).
+     * <p>
+     * Can be used to create an empty {@link Advancement} tab where there are no {@link Advancement} visible and no lines visible, when the tab only has a hidden {@link Advancement} as a root.
      *
-     * @param hiddenBoolean The new hiddenBoolean
+     * @param hiddenBoolean the new hiddenBoolean
      */
     public void setHiddenBoolean(boolean hiddenBoolean) {
         this.hiddenBoolean = hiddenBoolean;
     }
 
     /**
-     * Get the prefix that is used for criteria
+     * Gets the prefix that is used for criteria.
      *
-     * @return The prefix that is used for criteria
+     * @return the prefix that is used for criteria
      */
     public String getCriterionPrefix() {
         return criterionPrefix;
     }
 
     /**
-     * Set the prefix that is used for criteria<br>For legacy reasons, the default prefix is "criterion." as the advancement progress is stored by their criterion name, which consists of prefix + number<br>To reduce packet size and thus increase the max criteria number that can be used, the prefix can be set to an empty String<br>Only works for advancements that have not generated their criteria yet (use this method before adding advancements to it)
+     * Sets the prefix that is used for criteria.
+     * <p>
+     * For legacy reasons, the default prefix is "criterion." as the {@link Advancement} progress is stored by their criterion name, which consists of prefix + number.
+     * <p>
+     * To reduce packet size and thus increase the max criteria number that can be used, the prefix can be set to an empty {@link String}.
+     * <p>
+     * Only works for {@link Advancement}s that have not generated their criteria yet (Use this method before adding {@link Advancement}s to it).
      *
-     * @param criterionPrefix The new prefix that is used for criteria
+     * @param criterionPrefix the new prefix that is used for criteria
      */
     public void setCriterionPrefix(String criterionPrefix) {
         this.criterionPrefix = criterionPrefix;
     }
 
     /**
-     * Get the namespace that is used for the Namespaced Key for criteria
+     * Gets the namespace that is used for the {@link org.bukkit.NamespacedKey} for criteria.
      *
-     * @return The namespace that is used for the Namespaced Key for criteria
+     * @return the namespace that is used for the {@link org.bukkit.NamespacedKey} for criteria
      */
     public String getCriterionNamespace() {
         return criterionNamespace;
     }
 
     /**
-     * Set the namespace that is used for the Namespaced Key for criteria<br>Only works for advancements that have not generated their criteria yet (use this method before adding advancements to it)
+     * Sets the namespace that is used for the {@link org.bukkit.NamespacedKey} for criteria.
+     * <p>
+     * Only works for {@link Advancement}s that have not generated their criteria yet (Use this method before adding {@link Advancement}s to it).
      *
-     * @param criterionNamespace The new namespace that is used for the Namespaced Key for criteria
+     * @param criterionNamespace the new namespace that is used for the {@link org.bukkit.NamespacedKey} for criteria
      */
     public void setCriterionNamespace(String criterionNamespace) {
         this.criterionNamespace = criterionNamespace;
     }
 
     /**
-     * Get the key that is used for the Namespaced Key for criteria
+     * Gets the key that is used for the {@link org.bukkit.NamespacedKey} for criteria.
      *
-     * @return The key that is used for the Namespaced Key for criteria
+     * @return the key that is used for the {@link org.bukkit.NamespacedKey} for criteria
      */
     public String getCriterionKey() {
         return criterionKey;
     }
 
     /**
-     * Sets the key that is used for the Namespaced Key for criteria<br>Only works for advancements that have not generated their criteria yet (use this method before adding advancements to it)
+     * Sets the key that is used for the {@link org.bukkit.NamespacedKey} for criteria.
+     * <p>
+     * Only works for {@link Advancement}s that have not generated their criteria yet (Use this method before adding {@link Advancement}s to it).
      *
-     * @param criterionKey The new key that is used for the Namespaced Key for criteria
+     * @param criterionKey The new key that is used for the {@link org.bukkit.NamespacedKey} for criteria
      */
     public void setCriterionKey(String criterionKey) {
         this.criterionKey = criterionKey;
     }
 
     /**
-     * @return All players that have been added to the manager
+     * Gets all {@link Player}s that have been added to this {@link AdvancementManager}.
+     *
+     * @return all {@link Player}s that have been added to this {@link AdvancementManager}.
      */
     public ArrayList<Player> getPlayers() {
         players.removeIf(p -> p == null || !p.isOnline());
@@ -190,9 +217,9 @@ public final class AdvancementManager {
     }
 
     /**
-     * Adds a player to the manager
+     * Adds a {@link Player} to this {@link AdvancementManager}.
      *
-     * @param player Player to add
+     * @param player the {@link Player} to add
      */
     public void addPlayer(Player player) {
         Validate.notNull(player);
@@ -299,9 +326,9 @@ public final class AdvancementManager {
     }
 
     /**
-     * Removes a player from the manager
+     * Removes a {@link Player} from this {@link AdvancementManager}.
      *
-     * @param player Player to remove
+     * @param player the {@link Player} to remove
      */
     public void removePlayer(Player player) {
         players.remove(player);
@@ -320,9 +347,9 @@ public final class AdvancementManager {
     }
 
     /**
-     * Adds advancements or updates one advancement
+     * Adds {@link Advancement}s or updates one {@link Advancement}.
      *
-     * @param advancementsAdded An array of all advancements that should be added<br>If you want to update the display of an advancement, the array must have a length of 1
+     * @param advancementsAdded an array of {@link Advancement}s that should be added. In order to update the display of an {@link Advancement}, the array must have a length of 1.
      */
     public void addAdvancement(eu.endercentral.crazy_advancements.Advancement... advancementsAdded) {
         HashMap<Player, Collection<net.minecraft.advancements.Advancement>> advancementsList = new HashMap<>();
@@ -461,9 +488,9 @@ public final class AdvancementManager {
     }
 
     /**
-     * Removes an advancement from the manager
+     * Removes {@link Advancement}s from this {@link AdvancementManager}.
      *
-     * @param advancementsRemoved An array of advancements that should be removed
+     * @param advancementsRemoved an array of {@link Advancement}s that should be removed
      */
     public void removeAdvancement(Advancement... advancementsRemoved) {
         Collection<net.minecraft.advancements.Advancement> advs = new ArrayList<>();
@@ -486,9 +513,9 @@ public final class AdvancementManager {
     }
 
     /**
-     * Updates/Refreshes the player
+     * Updates/refreshes a {@link Player}.
      *
-     * @param player Player to update
+     * @param player the {@link Player} to update
      */
     public void update(Player player) {
         if (players.contains(player)) {
@@ -500,10 +527,10 @@ public final class AdvancementManager {
     }
 
     /**
-     * Updates/Refreshes the player
+     * Updates/refreshes a {@link Player}.
      *
-     * @param player Player to update
-     * @param tab    Tab to update
+     * @param player the {@link Player} to update
+     * @param tab    the tab to update
      */
     public void update(Player player, NameKey tab) {
         if (players.contains(player)) {
@@ -515,10 +542,10 @@ public final class AdvancementManager {
     }
 
     /**
-     * Updates advancement progress for a player
+     * Updates {@link Advancement} progress for a {@link Player}.
      *
-     * @param player              Player to update
-     * @param advancementsUpdated An array of advancement to update progress
+     * @param player              the {@link Player} to update
+     * @param advancementsUpdated an array of {@link Advancement}s of which to update progress
      */
     public void updateProgress(Player player, Advancement... advancementsUpdated) {
         updateProgress(player, false, true, advancementsUpdated);
@@ -543,11 +570,10 @@ public final class AdvancementManager {
                     HashSet<String> awarded = advancement.getAwardedCriteria(player.getUniqueId());
 
                     for (String criterion : advancement.getSavedCriteria().keySet()) {
+                        CriterionProgress critPrg = advPrg.getCriterionProgress(criterion);
                         if (awarded.contains(criterion)) {
-                            CriterionProgress critPrg = advPrg.getCriterionProgress(criterion);
                             critPrg.b();
                         } else {
-                            CriterionProgress critPrg = advPrg.getCriterionProgress(criterion);
                             critPrg.c();
                         }
                     }
@@ -625,10 +651,10 @@ public final class AdvancementManager {
     }
 
     /**
-     * Updates all possibly affected visibilities for all parents and childs
+     * Updates all possibly affected visibilities for all parents and children.
      *
-     * @param player Player to update
-     * @param from   Advancement to check from
+     * @param player the {@link Player} to update
+     * @param from   the {@link Advancement} to check from
      */
     public void updateAllPossiblyAffectedVisibilities(Player player, Advancement from) {
         List<Advancement> updated = from.getRow();
